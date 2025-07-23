@@ -51,6 +51,7 @@ function carregarViaturas() {
     document.getElementById('empenho').textContent = dados['NOTA EMPENHO'] || '(Sem Informação)';
     document.getElementById('fonte').textContent = capitalizar(dados['FONTE RECURSO']) || '(Sem Informação)';
     document.getElementById('representante').textContent = capitalizar(dados['REPRESENTANTE PÚBLICO']) || '(Sem Informação)';
+    document.getElementById('representante-link').href = dados['LINK REPRESENTANTE'] || '#';
   });
 }
 
