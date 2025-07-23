@@ -22,7 +22,7 @@ document.getElementById('prefixo-titulo').textContent = prefixo.toUpperCase();
 
 // Carrega os dados das viatura
 function carregarViaturas() {
-  dfd.readCSV('dados-viaturas.csv', { delimiter: ';' }).then(df => {
+  dfd.readCSV('dados/dados-viaturas.csv', { delimiter: ';' }).then(df => {
 
     // Cria nova coluna com valores em lowercase
     df = df.addColumn('PREFIXO_LOWER', df['PREFIXO'].values.map(p => p.toLowerCase()));
@@ -57,7 +57,7 @@ function carregarViaturas() {
 
 // Carrega os dados de polígonos
 function carregarPoligonos() {
-  fetch('poligonos.geojson')
+  fetch('dados/poligonos.geojson')
     .then(res => res.json())
     .then(data => {
       const layer = L.geoJSON(data, {
@@ -78,7 +78,7 @@ function carregarPoligonos() {
 
 // Carrega os dados das ocorrências e inicializa os filtros
 function carregarOcorrencias() {
-  fetch('ocorrencias.geojson')
+  fetch('dados/ocorrencias.geojson')
     .then(res => res.json())
     .then(data => {
       ocorrenciasRaw = data;
