@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Titillium Web', sans-serif;
+  background-color: #fff;
+  color: #333;
+  margin: 20px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #b22222; /* vermelho bombeiro */
+  margin: 20px 0;
+}
+
+h2, h3 {
+  text-align: center;
+  font-size: 1.6rem;
+  color: #8b0000;
+  margin: 10px 0;
+}
+
+ul {
+  margin-top: 10px;
+  padding-left: 0;
+  list-style: none;
+  font-weight: 600;
+  line-height: 1.6;
+  width: 100%;
+  max-width: 600px;
+}
+
+li {
+  background-color: #f9f9f9;
+  padding: 8px 12px;
+  border-left: 4px solid #b22222;
+  margin-bottom: 6px;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+li > span {
+  font-weight: normal;
+  color: #333;
+}
+
+#dados-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(178, 34, 34, 0.1);
+  background-color: #fff5f5;
+  margin-bottom: 30px;
+}
+
+#map-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 700px;
+  margin: auto;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #f4f4f4;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #444;
+}
+
+select {
+  padding: 6px 10px;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+#map {
+  height: 500px;
+  width: 100%;
+  border: 2px solid #8b0000;
+  border-radius: 8px;
+  margin-top: 10px;
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Informações da Viatura</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/danfojs@1.1.2/lib/bundle.min.js"></script>
+</head>
+<body>
+  <main>
+    <h1>Informações da Viatura</h1>
+    <h2 id="prefixo-titulo"></h2>
+    <section id="dados-container">
+      <h3>Dados da Viatura</h3>
+        <ul>
+          <li>Marca/Modelo: <span id="marca-modelo"></span></li>
+          <li>Ano: <span id="ano"></span></li>
+          <li>Prefixo: <span id="prefixo"></span></li>
+          <li>Placa: <span id="placa"></span></li>
+          <li>Designação: <span id="designacao"></span></li>
+          <li>Unidade detentora: <span id="unidade"></span></li>
+          <li>Regional: <span id="regional"></span></li>
+          <li>Cidade: <span id="cidade"></span></li>
+          <li>Valor do Investimento: <span id="valor"></span></li>
+          <li>Nota de Empenho: <span id="empenho"></span></li>
+          <li>Fonte do Recurso: <span id="fonte"></span></li>
+          <li>Representante Público: <span id="representante"></span></li>
+          <br>
+          <li>Quantidade de Ocorrências: <span id="num-ocorrencias"></span></li>
+          <li>Ocorrências com Vítimas: <span id="vitimas-salvas"></span></li>
+        </ul>
+      </table>
+    </section>
+    <div id="map-container">
+      <h3>Mapa de Ocorrências</h3>
+      <label for="ano-select">Ano</label>
+      <select id="ano-select"></select>
+      <div id="map"></div>
+    </div>
+  </main>
+  <script src="map.js"></script>
+</body>
+</html>
