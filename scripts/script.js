@@ -60,7 +60,7 @@ function carregarViaturas() {
       const valorFormatado = formatarNumero(dados['VALOR DO INVESTIMENTO']);
       document.getElementById('valor').textContent = valorFormatado ? `R$ ${valorFormatado}` : '(Sem Informação)';
       document.getElementById('empenho').textContent = dados['NOTA DO EMPENHO'] || '(Sem Informação)';
-      document.getElementById('fonte').textContent = `${capitalizar(dados['FONTE DO RECURSO']) + ': ' + dados['ID FONTE']}` || '(Sem Informação)';
+      document.getElementById('fonte').textContent = dados['FONTE DO RECURSO'] ? `${capitalizar(dados['FONTE DO RECURSO']) + ': ' + dados['ID FONTE']}` : '(Sem Informação)';
       document.getElementById('representante').textContent = capitalizar(dados['REPRESENTANTE PÚBLICO']) || '(Sem Informação)';
       document.getElementById('representante-link').href = dados['LINK PÚBLICO'] || '#';
     });
@@ -121,9 +121,18 @@ function atualizarOcorrenciasViatura(data) {
     return valor === 'SIM';
   }).length;
 
+  const municipiosAtendidos = new Set(
+    ocorrencias
+      .map(feature => feature.properties['Cidade'])
+      .filter(cidade => cidade && cidade.trim() !== '')
+      .map(cidade => capitalizarCidade(cidade))
+  );
+
   document.getElementById('num-ocorrencias').textContent = formatarNumero(totalOcorrencias);
   document.getElementById('vitimas-salvas').textContent = formatarNumero(vitimasSalvas);
+  document.getElementById('num-municipios').textContent = formatarNumero(municipiosAtendidos.size);
 }
+
 
 
 // Preenche o <select> com os anos extraídos dos dados

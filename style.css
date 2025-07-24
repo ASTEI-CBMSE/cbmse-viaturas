@@ -79,7 +79,7 @@ li > span {
   color: #333;
 }
 
-li.ocorrencias-total {
+li.destaque {
   font-size: 1.3rem;
   font-weight: 700;
   color: #b22222;
@@ -91,34 +91,18 @@ li.ocorrencias-total {
   transition: background-color 0.3s ease;
 }
 
-li.ocorrencias-total:hover {
+li.destaque:hover {
   background-color: #ffcccc;
 }
 
-li.ocorrencias-vitimas {
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: #800040;
-  background-color: #fff0f5;
-  border-left: 6px solid #c71585;
-  padding-left: 16px;
-  border-radius: 4px;
-  margin-bottom: 12px;
-  transition: background-color 0.3s ease;
-}
-
-li.ocorrencias-vitimas:hover {
-  background-color: #ffdaf0;
-}
-
-li.ocorrencias-total > span, li.ocorrencias-vitimas > span {
+li.destaque > span {
   font-weight: 900;
   font-size: 1.4rem;
   margin-left: 6px;
   color: inherit;
 }
 
-ul li:not(.ocorrencias-total):not(.ocorrencias-vitimas) {
+ul li:not(.destaque):not(.destaque) {
   font-weight: 600;
   color: #a03030; /* tom de vermelho mais suave */
   background-color: #fff0f0;
@@ -130,7 +114,7 @@ ul li:not(.ocorrencias-total):not(.ocorrencias-vitimas) {
   transition: background-color 0.2s ease;
 }
 
-ul li:not(.ocorrencias-total):not(.ocorrencias-vitimas):hover {
+ul li:not(.destaque):not(.destaque):hover {
   background-color: #ffdede;
 }
 
@@ -235,11 +219,39 @@ ul li:not(.ocorrencias-total):not(.ocorrencias-vitimas):hover {
     margin: 0;
   }
 
+  h1 {
+    font-size: 1.9em;
+  }
+
+  h2, h3 {
+    font-size: 1.4em;
+  }
+
+  li.destaque {
+    font-size: 1em;
+  }
+
+  li.destaque > span {
+    font-size: 1em;
+  }
+
+  ul li:not(.destaque):not(.destaque) {
+    font-size: 0.8em;
+  }
+
+  #contador-ano {
+    padding: 10px;
+    font-size: 1em;
+  }
+
+  #map {
+    height: 85vh;
+  }
+
   .legend {
-    padding: 4px;
-    font-size: 11px;
-    max-width: 90vw;
-    line-height: 1.2;
+    font-size: 10px;
+    max-width: 200px;
+    line-height: 1;
   }
 
   .legend i {
