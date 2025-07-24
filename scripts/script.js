@@ -32,44 +32,49 @@ document.getElementById('prefixo-titulo').textContent = prefixo.toUpperCase();
 
 // Carrega os dados das viatura
 function carregarViaturas() {
-  dfd.readCSV('dados/dados-viaturas.csv', { delimiter: ';' }).then(df => {
+  fetch('dados/dados-viaturas.csv.gz')
+    .then(res => res.arrayBuffer())
+    .then(buffer => {
+      const texto = pako.ungzip(new Uint8Array(buffer), { to: 'string' });
+      const blob = new Blob([texto], { type: 'text/csv' });
+      return dfd.readCSV(blob, { delimiter: ';' });
+    })
+    .then(df => {
+      df = df.addColumn('PREFIXO_LOWER', df['PREFIXO'].values.map(p => p.toLowerCase()));
 
-    // Cria nova coluna com valores em lowercase
-    df = df.addColumn('PREFIXO_LOWER', df['PREFIXO'].values.map(p => p.toLowerCase()));
+      const idx = df['PREFIXO_LOWER'].values.findIndex(p => p === prefixo);
+      const linha = df.iloc({ rows: [idx] });
+      const valores = linha.values[0];
+      const colunas = linha.columns;
 
-    // Encontra o índice da linha com prefixo correspondente
-    const idx = df['PREFIXO_LOWER'].values.findIndex(p => p === prefixo);
+      const dados = Object.fromEntries(colunas.map((col, i) => [col, valores[i]]));
 
-    const linha = df.iloc({ rows: [idx] });
-    const valores = linha.values[0];
-    const colunas = linha.columns;
-
-    // Cria um dicionário: {coluna: valor}
-    const dados = Object.fromEntries(colunas.map((col, i) => [col, valores[i]]));
-
-    // Preenche os dados no HTML
-    document.getElementById('marca-modelo').textContent = capitalizar(`${dados['MARCA']} ${dados['MODELO']}`) || '(Sem Informação)';
-    document.getElementById('ano').textContent = dados['ANO'] || '(Sem Informação)';
-    document.getElementById('prefixo').textContent = dados['PREFIXO'] || '(Sem Informação)';
-    document.getElementById('placa').textContent = dados['PLACA'] || '(Sem Informação)';
-    document.getElementById('designacao').textContent = capitalizar(dados['DESIGNAÇÃO']) || '(Sem Informação)';
-    document.getElementById('unidade').textContent = dados['UNIDADE DETENTORA'] || '(Sem Informação)';
-    document.getElementById('regional').textContent = capitalizar(dados['REGIONAL']) || '(Sem Informação)';
-    document.getElementById('cidade').textContent = capitalizarCidade(dados['CIDADE']) || '(Sem Informação)';
-    const valorFormatado = formatarNumero(dados['VALOR INVESTIMENTO']);
-    document.getElementById('valor').textContent = valorFormatado ? `R$ ${valorFormatado}` : '(Sem Informação)';
-    document.getElementById('empenho').textContent = dados['NOTA EMPENHO'] || '(Sem Informação)';
-    document.getElementById('fonte').textContent = capitalizar(dados['FONTE RECURSO']) || '(Sem Informação)';
-    document.getElementById('representante').textContent = capitalizar(dados['REPRESENTANTE PÚBLICO']) || '(Sem Informação)';
-    document.getElementById('representante-link').href = dados['LINK REPRESENTANTE'] || '#';
-  });
+      document.getElementById('marca-modelo').textContent = capitalizar(`${dados['MARCA']} ${dados['MODELO']}`) || '(Sem Informação)';
+      document.getElementById('ano').textContent = dados['ANO'] || '(Sem Informação)';
+      document.getElementById('prefixo').textContent = dados['PREFIXO'] || '(Sem Informação)';
+      document.getElementById('placa').textContent = dados['PLACA'] || '(Sem Informação)';
+      document.getElementById('designacao').textContent = capitalizar(dados['DESIGNAÇÃO']) || '(Sem Informação)';
+      document.getElementById('unidade').textContent = dados['UNIDADE DETENTORA'] || '(Sem Informação)';
+      document.getElementById('regional').textContent = capitalizar(dados['REGIONAL']) || '(Sem Informação)';
+      document.getElementById('cidade').textContent = capitalizarCidade(dados['CIDADE']) || '(Sem Informação)';
+      const valorFormatado = formatarNumero(dados['VALOR INVESTIMENTO']);
+      document.getElementById('valor').textContent = valorFormatado ? `R$ ${valorFormatado}` : '(Sem Informação)';
+      document.getElementById('empenho').textContent = dados['NOTA EMPENHO'] || '(Sem Informação)';
+      document.getElementById('fonte').textContent = capitalizar(dados['FONTE RECURSO']) || '(Sem Informação)';
+      document.getElementById('representante').textContent = capitalizar(dados['REPRESENTANTE PÚBLICO']) || '(Sem Informação)';
+      document.getElementById('representante-link').href = dados['LINK REPRESENTANTE'] || '#';
+    });
 }
+
 
 // Carrega os dados de polígonos
 function carregarPoligonos() {
-  fetch('dados/poligonos.geojson')
-    .then(res => res.json())
-    .then(data => {
+  fetch('dados/poligonos.geojson.gz')
+    .then(res => res.arrayBuffer())
+    .then(buffer => {
+      const texto = pako.ungzip(new Uint8Array(buffer), { to: 'string' });
+      const data = JSON.parse(texto);
+
       const layer = L.geoJSON(data, {
         style: {
           color: '#3388ff',
@@ -86,16 +91,19 @@ function carregarPoligonos() {
     });
 }
 
+
 // Carrega os dados das ocorrências e inicializa os filtros
 function carregarOcorrencias() {
-  fetch('dados/ocorrencias.geojson')
-    .then(res => res.json())
-    .then(data => {
-      ocorrenciasRaw = data;
+  fetch('dados/ocorrencias.geojson.gz')
+    .then(res => res.arrayBuffer())
+    .then(buffer => {
+      const texto = pako.ungzip(new Uint8Array(buffer), { to: 'string' });
+      const data = JSON.parse(texto);
 
+      ocorrenciasRaw = data;
       atualizarOcorrenciasViatura(data);
       preencherAnosDisponiveis(data);
-      exibirOcorrenciasFiltradas(); // Primeira renderização
+      exibirOcorrenciasFiltradas();
     });
 }
 
