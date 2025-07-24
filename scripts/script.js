@@ -168,6 +168,9 @@ function exibirOcorrenciasFiltradas() {
     return extrairAno(dataStr) === anoSelecionado;
   });
 
+  const contadorAnoEl = document.getElementById('contador-ano');
+  contadorAnoEl.textContent = `Ocorrências atendidas no ano: ${formatarNumero(ocorrenciasFiltradas.length)}`;
+
   ocorrenciasLayer = L.geoJSON({ ...ocorrenciasRaw, features: ocorrenciasFiltradas }, {
     pointToLayer: (feature, latlng) => {
       const categoria = feature.properties['Categoria'] || 'default';
@@ -203,6 +206,7 @@ function exibirOcorrenciasFiltradas() {
     }
   }).addTo(map);
 }
+
 
 function adicionarLegendaCategorias() {
   const legenda = L.control({ position: 'bottomright' });
@@ -275,6 +279,27 @@ function capitalizarCidade(cidade) {
 
 // Eventos
 selectAno.addEventListener('change', exibirOcorrenciasFiltradas);
+document.getElementById('share-button').addEventListener('click', async () => {
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: document.title,
+        url: window.location.href
+      });
+    } catch (err) {
+      console.error('Erro no compartilhamento:', err);
+    }
+  } else if (navigator.clipboard) {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      alert('URL copiada para a área de transferência!');
+    } catch (err) {
+      alert('Não foi possível copiar a URL. Copie manualmente: ' + window.location.href);
+    }
+  } else {
+    prompt('Copie a URL abaixo:', window.location.href);
+  }
+});
 
 // Inicialização
 carregarViaturas()
