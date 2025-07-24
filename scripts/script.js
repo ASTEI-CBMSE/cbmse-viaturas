@@ -57,12 +57,12 @@ function carregarViaturas() {
       document.getElementById('unidade').textContent = dados['UNIDADE DETENTORA'] || '(Sem Informação)';
       document.getElementById('regional').textContent = capitalizar(dados['REGIONAL']) || '(Sem Informação)';
       document.getElementById('cidade').textContent = capitalizarCidade(dados['CIDADE']) || '(Sem Informação)';
-      const valorFormatado = formatarNumero(dados['VALOR INVESTIMENTO']);
+      const valorFormatado = formatarNumero(dados['VALOR DO INVESTIMENTO']);
       document.getElementById('valor').textContent = valorFormatado ? `R$ ${valorFormatado}` : '(Sem Informação)';
-      document.getElementById('empenho').textContent = dados['NOTA EMPENHO'] || '(Sem Informação)';
-      document.getElementById('fonte').textContent = capitalizar(dados['FONTE RECURSO']) || '(Sem Informação)';
+      document.getElementById('empenho').textContent = dados['NOTA DO EMPENHO'] || '(Sem Informação)';
+      document.getElementById('fonte').textContent = `${capitalizar(dados['FONTE DO RECURSO']) + ': ' + dados['ID FONTE']}` || '(Sem Informação)';
       document.getElementById('representante').textContent = capitalizar(dados['REPRESENTANTE PÚBLICO']) || '(Sem Informação)';
-      document.getElementById('representante-link').href = dados['LINK REPRESENTANTE'] || '#';
+      document.getElementById('representante-link').href = dados['LINK PÚBLICO'] || '#';
     });
 }
 
