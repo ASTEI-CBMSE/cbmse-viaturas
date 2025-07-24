@@ -16,6 +16,16 @@ const params = new URLSearchParams(window.location.search);
 const prefixo = (params.get('prefixo') || '').toLowerCase();
 let ocorrenciasRaw = null;
 let ocorrenciasLayer = null;
+const coresPorCategoria = {
+  'ACIDENTE': '#f5b50a',
+  'BUSCA E SALVAMENTO': '#214e8b',
+  'INCÊNDIO': '#d91f1f',
+  'PRÉ-HOSPITALAR': '#d42ca5',
+  'SERVIÇOS E ATIVIDADES': '#2b8286',
+  'PRODUTOS PERIGOSOS': '#798b21',
+  'INFRAESTRUTURA E VIAS DE COMUNICAÇÃO': '#2f2f2f',
+  'default': '#cacaca'
+};
 
 // Prefixo no título
 document.getElementById('prefixo-titulo').textContent = prefixo.toUpperCase();
@@ -152,15 +162,19 @@ function exibirOcorrenciasFiltradas() {
 
   ocorrenciasLayer = L.geoJSON({ ...ocorrenciasRaw, features: ocorrenciasFiltradas }, {
     pointToLayer: (feature, latlng) => {
+      const categoria = feature.properties['Categoria'] || 'default';
+      const cor = coresPorCategoria[categoria.toUpperCase()] || coresPorCategoria['default'];
+
       return L.circleMarker(latlng, {
         radius: 8,
-        fillColor: '#ff0000',
+        fillColor: cor,
         color: '#000',
         weight: 1,
         opacity: 1,
-        fillOpacity: 0.8
+        fillOpacity: 1
       });
     },
+
     onEachFeature: (feature, layer) => {
       const props = feature.properties;
       const data = props['Dt de Cadastro'] || 'Sem data';
@@ -180,6 +194,27 @@ function exibirOcorrenciasFiltradas() {
       layer.bindPopup(conteudo);
     }
   }).addTo(map);
+}
+
+function adicionarLegendaCategorias() {
+  const legenda = L.control({ position: 'bottomright' });
+
+  legenda.onAdd = function () {
+    const div = L.DomUtil.create('div', 'info legend');
+    const categorias = Object.keys(coresPorCategoria).filter(c => c !== 'default');
+
+    let html = '<strong>Categoria</strong><br>';
+
+    categorias.forEach(categoria => {
+      const cor = coresPorCategoria[categoria];
+      html += `<i style="background:${cor}; width: 18px; height: 18px; display: inline-block; margin-right: 6px; border: 1px solid #000;"></i> ${categoria}<br>`;
+    });
+
+    div.innerHTML = html;
+    return div;
+  };
+
+  legenda.addTo(map);
 }
 
 // Função auxiliar para extrair o ano de uma string de data (formato BR: dd/mm/yyyy)
@@ -237,3 +272,4 @@ selectAno.addEventListener('change', exibirOcorrenciasFiltradas);
 carregarViaturas()
 carregarPoligonos();
 carregarOcorrencias();
+adicionarLegendaCategorias();
