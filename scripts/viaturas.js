@@ -9,8 +9,10 @@ export function carregarViaturas(prefixo) {
       return dfd.readCSV(blob, { delimiter: ';' });
     })
     .then(df => {
+      df = df.query(df['PREFIXO'].map(p => p && p.trim() !== ''));
       df = df.addColumn('PREFIXO_LOWER', df['PREFIXO'].values.map(p => p.toLowerCase()));
-      const idx = df['PREFIXO_LOWER'].values.findIndex(p => p === prefixo);
+
+      const idx = df['PREFIXO_LOWER'].values.findIndex(p => p === prefixo.toLowerCase());
       if (idx === -1) return;
 
       const linha = df.iloc({ rows: [idx] });
@@ -24,9 +26,13 @@ export function carregarViaturas(prefixo) {
       document.getElementById('unidade').textContent = dados['UNIDADE DETENTORA'] || '(Sem Informação)';
       document.getElementById('regional').textContent = capitalizar(dados['REGIONAL']) || '(Sem Informação)';
       document.getElementById('cidade').textContent = capitalizarCidade(dados['CIDADE']) || '(Sem Informação)';
-      document.getElementById('valor').textContent = formatarNumero(dados['VALOR DO INVESTIMENTO']) ? `R$ ${formatarNumero(dados['VALOR DO INVESTIMENTO'])}` : '(Sem Informação)';
+      document.getElementById('valor').textContent = formatarNumero(dados['VALOR DO INVESTIMENTO'])
+        ? `R$ ${formatarNumero(dados['VALOR DO INVESTIMENTO'])}`
+        : '(Sem Informação)';
       document.getElementById('empenho').textContent = dados['NOTA DO EMPENHO'] || '(Sem Informação)';
-      document.getElementById('fonte').textContent = dados['FONTE DO RECURSO'] ? `${capitalizar(dados['FONTE DO RECURSO']) + ': ' + dados['ID FONTE']}` : '(Sem Informação)';
+      document.getElementById('fonte').textContent = dados['FONTE DO RECURSO']
+        ? `${capitalizar(dados['FONTE DO RECURSO']) + ': ' + dados['ID FONTE']}`
+        : '(Sem Informação)';
       document.getElementById('representante').textContent = capitalizar(dados['REPRESENTANTE PÚBLICO']) || '(Sem Informação)';
       document.getElementById('representante-link').href = dados['LINK PÚBLICO'] || '#';
     });
