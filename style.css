@@ -245,18 +245,18 @@ ul li:not(.destaque):not(.destaque):hover {
   }
 
   #map {
-    height: 85vh;
+    height: 70vh;
   }
 
   .legend {
-    font-size: 10px;
+    font-size: 6px;
     max-width: 200px;
     line-height: 1;
   }
 
   .legend i {
-    width: 14px;
-    height: 14px;
+    font-size: 5px;
+    height: 5px;
     margin: 2px 4px 2px 0;
   }
 
