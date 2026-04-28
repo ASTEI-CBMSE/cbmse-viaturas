@@ -11,9 +11,21 @@ export function carregarViaturas(prefixo) {
     .then(df => {
       df = df.query(df['PREFIXO'].map(p => p && p.trim() !== ''));
       df = df.addColumn('PREFIXO_LOWER', df['PREFIXO'].values.map(p => p.toLowerCase()));
+      // Coluna adicional com prefixo normalizado (sem hífens) para permitir buscas
+      // por formas com e sem hífen (ex: abt-19 e abt19).
+      df = df.addColumn('PREFIXO_NORMALIZED', df['PREFIXO_LOWER'].values.map(p => p.replace(/-/g, '')));
 
-      const idx = df['PREFIXO_LOWER'].values.findIndex(p => p === prefixo.toLowerCase());
-      if (idx === -1) return;
+      const busca = prefixo.toLowerCase();
+      const buscaNormalizada = busca.replace(/-/g, '');
+
+      // Tentar encontrar por igualdade direta ou pela versão normalizada
+      let idx = df['PREFIXO_LOWER'].values.findIndex(p => p === busca || p === buscaNormalizada);
+      // Se não encontrado pela coluna original, tentar pela coluna normalizada
+      if (idx === -1) {
+        const idx2 = df['PREFIXO_NORMALIZED'].values.findIndex(p => p === busca || p === buscaNormalizada);
+        if (idx2 === -1) return;
+        idx = idx2;
+      }
 
       const linha = df.iloc({ rows: [idx] });
       const dados = Object.fromEntries(linha.columns.map((col, i) => [col, linha.values[0][i]]));

@@ -12,7 +12,31 @@ export function extrairAno(dataStr) {
 }
 
 export function obterViaturas(f) {
-  return (f.properties['Indicativo Viatura'] || '').split(',').map(v => v.trim().toLowerCase());
+  const raw = (f.properties['Indicativo Viatura'] || '');
+  // Para cada indicativo, incluir tanto a versão sem hífen quanto a versão
+  // com hífen (inserindo um hífen entre letras e dígitos quando necessário).
+  // Ex: 'ABT-19' -> ['abt19','abt-19'], 'abt19' -> ['abt19','abt-19']
+  const variants = raw.split(',')
+    .map(v => v.trim())
+    .filter(Boolean)
+    .map(v => v.toLowerCase())
+    .flatMap(v => {
+      const without = v.replace(/-/g, '');
+      // Se já tiver hífen, mantém
+      if (v.includes('-')) {
+        return [without, v];
+      }
+      // Tentar inserir hífen entre letras e dígitos: 'abt19' -> 'abt-19'
+      const m = without.match(/^([a-z]+)(\d+)$/i);
+      if (m) {
+        const withHyphen = `${m[1]}-${m[2]}`;
+        return [without, withHyphen];
+      }
+      // Caso geral: retornar apenas a forma sem hífen e a original (idem)
+      return [without, v];
+    });
+
+  return [...new Set(variants)];
 }
 
 export function formatarNumero(v) {
