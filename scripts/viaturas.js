@@ -38,8 +38,11 @@ export function carregarViaturas(prefixo) {
       document.getElementById('unidade').textContent = dados['UNIDADE DETENTORA'] || '(Sem Informação)';
       document.getElementById('regional').textContent = capitalizar(dados['REGIONAL']) || '(Sem Informação)';
       document.getElementById('cidade').textContent = capitalizarCidade(dados['CIDADE']) || '(Sem Informação)';
-      document.getElementById('valor').textContent = formatarNumero(dados['VALOR DO INVESTIMENTO'])
-        ? `R$ ${formatarNumero(dados['VALOR DO INVESTIMENTO'])}`
+      // Algumas exportações trazem espaços ao redor do nome desta coluna.
+      // Aceitar os dois formatos mantém compatibilidade com bases antigas e novas.
+      const valorInvestimento = dados['VALOR DO INVESTIMENTO'] ?? dados[' VALOR DO INVESTIMENTO '];
+      document.getElementById('valor').textContent = formatarNumero(valorInvestimento)
+        ? `R$ ${formatarNumero(valorInvestimento)}`
         : '(Sem Informação)';
       document.getElementById('empenho').textContent = dados['NOTA DO EMPENHO'] || '(Sem Informação)';
       document.getElementById('fonte').textContent = dados['FONTE DO RECURSO']
